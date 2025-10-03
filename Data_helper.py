@@ -114,8 +114,15 @@ class Preprocessing_Pipeline:
         # Get transformed column names
         all_features = clf.get_feature_names_out()
 
-        transformed_df = pd.DataFrame(trf, columns=all_features, index=self.df.index)
+        transformed_df = pd.self.dfFrame(trf, columns=all_features, index=self.df.index)
 
         self.df = pd.concat([temp_df, transformed_df], axis=1)
+
+        return self.df
+    
+    def add_lag_features(self):
+        self.df['Sales_lag_1D'] = self.df['Sales'].shift(1)
+        self.df['Sales_lag_7D'] = self.df['Sales'].shift(7)
+        self.df['Sales_lag_1M'] = self.df['Sales'].shift(30)
 
         return self.df

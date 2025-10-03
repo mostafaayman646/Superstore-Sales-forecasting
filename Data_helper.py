@@ -1,10 +1,16 @@
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler, StandardScaler,OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
 
 class Preprocessing_Pipeline:
     def __init__(self,df):
         self.df = df
     
+    def remove_features(self,features):
+        return self.df.drop(columns = features)
+        
     def change_to_obj(self,feature):
         if feature in self.df.columns:
             if self.df[feature].dtype != 'object':
@@ -80,4 +86,36 @@ class Preprocessing_Pipeline:
         #Years
         self.df['year'] = self.df['Order Date'].dt.year
     
+        return self.df
+
+    def scaling_encoding(self):
+        temp_features = [
+            'Row ID','Order ID','Ship Date','Order Date','Customer ID',
+            'Customer Name','Product ID','Product Name','Postal Code'
+        ]
+        
+        temp_df = self.df[temp_features].copy()
+
+        self.df = self.remove_features(features=temp_features)
+
+        numeric_features = self.df.select_dtypes(include=["float64"]).columns.tolist()
+        categorical_features = self.df.select_dtypes(exclude=["float64"]).columns.tolist()
+
+        scaler = MinMaxScaler()
+        numeric_pipeline = Pipeline([("scaler", scaler)])
+
+        clf = ColumnTransformer([
+            ('ohe', OneHotEncoder(handle_unknown='ignore', sparse_output=False), categorical_features),
+            ('numeric', numeric_pipeline, numeric_features)
+        ], remainder='passthrough')
+
+        trf = clf.fit_transform(self.df)
+
+        # Get transformed column names
+        all_features = clf.get_feature_names_out()
+
+        transformed_df = pd.DataFrame(trf, columns=all_features, index=self.df.index)
+
+        self.df = pd.concat([temp_df, transformed_df], axis=1)
+
         return self.df

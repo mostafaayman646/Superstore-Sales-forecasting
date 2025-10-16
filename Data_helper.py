@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, StandardScaler,OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
+from feature_engine.timeseries.forecasting import LagFeatures
 
 class Preprocessing_Pipeline:
     def __init__(self,df):
@@ -53,38 +54,9 @@ class Preprocessing_Pipeline:
         return 'This feature not exist'
     
     def create_Time_Based_features(self):
-        #Day of Week
-        self.df["dayofweek"] = self.df["Order Date"].dt.dayofweek
-
-        self.df["dayofweek"] = self.df["dayofweek"].map(
-            lambda x: "Weekend" if x >= 5 else "Job_days"
-        )
-
-        # Day of month and day of year
-        self.df["day"]= self.df["Order Date"].dt.day
-
-        doy_bins   = [0, 90, 180, 270, 365]  
-        doy_labels = ["Q1", "Q2", "Q3", "Q4"]  
-        self.df["dayofyear_bin"] = pd.cut(
-            self.df["Order Date"].dt.day_of_year,
-            bins=doy_bins,
-            labels=doy_labels
-        )
-
-        # Month and # Seasons
-        self.df["month"] = self.df["Order Date"].dt.month
-
-        season_bins   = [0, 3, 6, 9, 11]   # Winter(Dec–Feb), Spring, Summer, Autumn
-        season_labels = ['Winter', 'Spring', 'Summer', 'Autumn']
-        self.df["season"] = pd.cut(
-            self.df["month"],
-            bins=season_bins,
-            labels=season_labels,
-            right=False
-        )
-        
-        #Years
-        self.df['year'] = self.df['Order Date'].dt.year
+        self.df['Day']   =  self.df['Order Date'].dt.day
+        self.df['Month'] =  self.df['Order Date'].dt.month
+        self.df['Year']  =  self.df['Order Date'].dt.year
     
         return self.df
 
@@ -121,8 +93,6 @@ class Preprocessing_Pipeline:
         return self.df
     
     def add_lag_features(self):
-        self.df['Sales_lag_1D'] = self.df['Sales'].shift(1)
-        self.df['Sales_lag_7D'] = self.df['Sales'].shift(7)
-        self.df['Sales_lag_1M'] = self.df['Sales'].shift(30)
-
-        return self.df
+        Lag_tranformer = LagFeatures(variables = ['Sales'], periods=[1,7,30,60])
+        
+        return Lag_tranformer.fit_transform(self.df)

@@ -1,98 +1,92 @@
-import numpy as np
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler, StandardScaler,OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-from feature_engine.timeseries.forecasting import LagFeatures
 
-class Preprocessing_Pipeline:
-    def __init__(self,df):
-        self.df = df
+def state_mapping(df):
+    all_state_mapping = {
+    "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR",
+    "California": "CA", "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE",
+    "Florida": "FL", "Georgia": "GA", "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL",
+    "Indiana": "IN", "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA",
+    "Maine": "ME", "Maryland": "MD", "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN",
+    "Mississippi": "MS", "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV",
+    "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY",
+    "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK",
+    "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC",
+    "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT",
+    "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY"
+    }
+    # Add the Abbreviation column to the DataFrame
+    df['Abbreviation'] = df['State'].map(all_state_mapping)
+    return df
+
+def load_data(path):
+    return pd.read_csv(path)
+
+def date_time_processing_pipeline(df):
+    # Convert the "Order Date" column to a datetime format with "dd/mm/yyyy" format
+    df['Order Date'] = pd.to_datetime(df['Order Date'], format='%d/%m/%Y')
     
-    def remove_features(self,features):
-        return self.df.drop(columns = features)
-        
-    def change_to_obj(self,feature):
-        if feature in self.df.columns:
-            if self.df[feature].dtype != 'object':
-                self.df[feature] = self.df[feature].astype('object')
-            return self.df
-        
-        return 'This feature not exist'
+    # Extract day, month, and year into separate columns
+    df['Day'] = df['Order Date'].dt.day
+    df['Month'] = df['Order Date'].dt.month
+    df['Year'] = df['Order Date'].dt.year
     
-    def change_to_date(self,feature):
-        if feature in self.df.columns:
-            self.df[feature] = pd.to_datetime(self.df[feature], format='%d/%m/%Y')
-            return self.df
-        
-        return 'This feature not exist'
+    # Combine "Month" and "Year" into a datetime column
+    df['Date'] = pd.to_datetime(df['Year'].astype(str) + '-' + df['Month'].astype(str), format='%Y-%m')
     
-    def handle_na(self,feature,remove=False,value_to_add = None):
-        if feature in self.df.columns:
-            if not remove:
-                self.df[feature] = self.df[feature].fillna(value_to_add)
-            
-            return self.df
-        return 'This feature not exist'
+    # Convert "Order Date" to a datetime column
+    df['Order Date'] = pd.to_datetime(df['Order Date'], format='%m/%d/%Y')
     
-    def handle_outliers(self,feature,log_transform = False):
-        if feature in self.df.columns:
-            Q1 = self.df[feature].quantile(0.25)
-            Q3 = self.df[feature].quantile(0.75)
-            IQR = Q3 - Q1
-
-            lower_bound = Q1 - 1.5 * IQR
-            upper_bound = Q3 + 1.5 * IQR
-
-            self.df = self.df.loc[(self.df[feature] >= lower_bound) & (self.df[feature] <= upper_bound)]
-
-            if log_transform:
-                self.df[f'log_scaled_{feature}'] = np.log1p(self.df[feature])
-            
-            return self.df
-        
-        return 'This feature not exist'
+    # Generate a date range from the minimum to the maximum date
+    date_range = pd.date_range(start=df['Order Date'].min(), end=df['Order Date'].max())
     
-    def create_Time_Based_features(self):
-        self.df['Day']   =  self.df['Order Date'].dt.day
-        self.df['Month'] =  self.df['Order Date'].dt.month
-        self.df['Year']  =  self.df['Order Date'].dt.year
+    # Find missing dates by comparing the date range with the unique dates in the "Order Date" column
+    missing_dates = date_range[~date_range.isin(df['Order Date'])]
     
-        return self.df
+    # Count the total number of missing dates
+    total_missing_dates = len(missing_dates) #228
 
-    def scaling_encoding(self):
-        temp_features = [
-            'Row ID','Order ID','Ship Date','Order Date','Customer ID',
-            'Customer Name','Product ID','Product Name','Postal Code'
-        ]
-        
-        temp_df = self.df[temp_features].copy()
+    # Convert "Order Date" to a datetime column
+    df['Order Date'] = pd.to_datetime(df['Order Date'], format='%m/%d/%Y')
 
-        self.df = self.remove_features(features=temp_features)
+    # Define the date range
+    date_range = pd.date_range(start=df['Order Date'].min(), end=df['Order Date'].max())
 
-        numeric_features = self.df.select_dtypes(include=["float64"]).columns.tolist()
-        categorical_features = self.df.select_dtypes(exclude=["float64"]).columns.tolist()
+    # Find missing dates
+    missing_dates = date_range.difference(df['Order Date'])
 
-        scaler = MinMaxScaler()
-        numeric_pipeline = Pipeline([("scaler", scaler)])
+    # Add missing dates to the DataFrame with Sales number of 0
+    missing_data = {
+        "Order Date": missing_dates,
+        "Sales": [0] * len(missing_dates)
+    }
+    missing_df = pd.DataFrame(missing_data)
 
-        clf = ColumnTransformer([
-            ('ohe', OneHotEncoder(handle_unknown='ignore', sparse_output=False), categorical_features),
-            ('numeric', numeric_pipeline, numeric_features)
-        ], remainder='passthrough')
+    # Concatenate the missing data with the original DataFrame
+    df = pd.concat([df, missing_df], ignore_index=True)
 
-        trf = clf.fit_transform(self.df)
+    # Sort the DataFrame by "Order Date"
+    df = df.sort_values(by='Order Date')
 
-        # Get transformed column names
-        all_features = clf.get_feature_names_out()
+    # Convert "Order Date" to a datetime column
+    df['Order Date'] = pd.to_datetime(df['Order Date'], format='%m/%d/%Y')
 
-        transformed_df = pd.self.dfFrame(trf, columns=all_features, index=self.df.index)
-
-        self.df = pd.concat([temp_df, transformed_df], axis=1)
-
-        return self.df
+    # Extract the "Day," "Month," and "Year" from the "Order Date" column
+    df['Day'] = df['Order Date'].dt.day
+    df['Month'] = df['Order Date'].dt.month
+    df['Year'] = df['Order Date'].dt.year
     
-    def add_lag_features(self):
-        Lag_tranformer = LagFeatures(variables = ['Sales'], periods=[1,7,30,60])
-        
-        return Lag_tranformer.fit_transform(self.df)
+    return df
+
+def preprocessing():
+    #Load Data
+    df = load_data('Data/train.csv')
+    
+    # Create a mapping for all 50 states 
+    df = state_mapping(df)
+    
+    # Sort the DataFrame by 'Sales' in descending order
+    df = df.sort_values(by='Sales', ascending=False)
+    
+    df = date_time_processing_pipeline(df)
+    
+    return df

@@ -1,0 +1,553 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0a192f 0%, #112240 50%, #0a192f 100%);
+  color: #e6f1ff;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header - Dark Blue Theme */
+.header {
+  background: linear-gradient(135deg, #112240 0%, #0a192f 100%);
+  color: #e6f1ff;
+  padding: 2.5rem 0;
+  text-align: center;
+  border-bottom: 1px solid #233554;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.header h1 {
+  font-size: 2.8rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #64ffda 0%, #8892b0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.header p {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  color: #8892b0;
+}
+
+/* Tab Navigation - Dark Theme */
+.tab-navigation {
+  background: #112240;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+  padding: 0 20px;
+  border-bottom: 1px solid #233554;
+}
+
+.tab-navigation button {
+  background: none;
+  border: none;
+  padding: 1.2rem 2.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  color: #8892b0;
+  font-weight: 500;
+}
+
+.tab-navigation button:hover {
+  background-color: #1d2f4f;
+  color: #64ffda;
+}
+
+.tab-navigation button.active {
+  border-bottom-color: #64ffda;
+  color: #64ffda;
+  font-weight: 600;
+  background: rgba(100, 255, 218, 0.1);
+}
+
+/* Main Content */
+.main-content {
+  padding: 2.5rem 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Sales Predictor - Dark Card */
+.sales-predictor {
+  background: linear-gradient(135deg, #112240 0%, #1d2f4f 100%);
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid #233554;
+  backdrop-filter: blur(10px);
+}
+
+.sales-predictor h2 {
+  margin-bottom: 1.5rem;
+  color: #e6f1ff;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.description {
+  color: #8892b0;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.prediction-form {
+  margin-bottom: 2rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: #64ffda;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 1rem;
+  background: #0a192f;
+  border: 1px solid #233554;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #e6f1ff;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #64ffda;
+  box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+  background: #112240;
+}
+
+.form-group input::placeholder {
+  color: #8892b0;
+}
+
+/* Buttons */
+button {
+  background: linear-gradient(135deg, #64ffda 0%, #233554 100%);
+  color: #0a192f;
+  border: none;
+  padding: 1.2rem 2.5rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Prediction Result */
+.prediction-result {
+  margin-top: 2.5rem;
+}
+
+.prediction-card {
+  background: linear-gradient(135deg, #1d2f4f 0%, #233554 100%);
+  color: #e6f1ff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #64ffda;
+  box-shadow: 0 8px 32px rgba(100, 255, 218, 0.2);
+}
+
+.prediction-value {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #64ffda 0%, #e6f1ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.prediction-card p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #8892b0;
+}
+
+.confidence-interval {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(10, 25, 47, 0.6);
+  border-radius: 8px;
+  border: 1px solid #233554;
+}
+
+.interval-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #233554;
+}
+
+.interval-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.interval-label {
+  font-weight: 600;
+  color: #64ffda;
+}
+
+.interval-value {
+  font-family: 'Courier New', monospace;
+  color: #e6f1ff;
+  font-weight: 500;
+}
+
+.prediction-card small {
+  color: #8892b0;
+  font-size: 0.9rem;
+}
+
+.error-message {
+  background: rgba(220, 53, 69, 0.2);
+  color: #f8d7da;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border: 1px solid #dc3545;
+  font-weight: 500;
+}
+
+/* Forecast Chart - Dark Theme */
+.forecast-chart {
+  background: linear-gradient(135deg, #112240 0%, #1d2f4f 100%);
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid #233554;
+}
+
+.forecast-chart h2 {
+  color: #e6f1ff;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.chart-controls {
+  display: flex;
+  gap: 1.5rem;
+  align-items: end;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.chart-controls .form-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.chart-container {
+  margin: 2.5rem 0;
+  background: #0a192f;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid #233554;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #64ffda;
+  font-size: 1.1rem;
+}
+
+.forecast-details {
+  margin-top: 3rem;
+}
+
+.forecast-details h3 {
+  color: #e6f1ff;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.forecast-table {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #233554;
+}
+
+.forecast-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #0a192f;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.forecast-table th,
+.forecast-table td {
+  padding: 1.2rem;
+  text-align: left;
+  border-bottom: 1px solid #233554;
+  color: #e6f1ff;
+}
+
+.forecast-table th {
+  background: #112240;
+  font-weight: 600;
+  color: #64ffda;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.forecast-table tr:hover {
+  background: #1d2f4f;
+}
+
+.forecast-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Model Info - Dark Theme */
+.model-info {
+  background: linear-gradient(135deg, #112240 0%, #1d2f4f 100%);
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid #233554;
+}
+
+.model-info h2 {
+  color: #e6f1ff;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+.info-section {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #233554;
+}
+
+.info-section:last-child {
+  border-bottom: none;
+}
+
+.info-section h3 {
+  color: #64ffda;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.2rem;
+  background: rgba(10, 25, 47, 0.6);
+  border-radius: 8px;
+  border: 1px solid #233554;
+  transition: all 0.3s ease;
+}
+
+.info-item:hover {
+  border-color: #64ffda;
+  transform: translateY(-2px);
+}
+
+.info-item .label {
+  font-weight: 600;
+  color: #8892b0;
+}
+
+.info-item .value {
+  font-weight: 500;
+  color: #e6f1ff;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.metric-card {
+  background: linear-gradient(135deg, #1d2f4f 0%, #233554 100%);
+  color: #e6f1ff;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #233554;
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+  border-color: #64ffda;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(100, 255, 218, 0.2);
+}
+
+.metric-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, #64ffda 0%, #e6f1ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.metric-label {
+  font-size: 1rem;
+  color: #8892b0;
+  font-weight: 500;
+}
+
+.performance-note {
+  color: #8892b0;
+  font-style: italic;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Recharts Customization for Dark Theme */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #233554;
+}
+
+.recharts-text {
+  fill: #8892b0;
+  font-size: 12px;
+}
+
+.recharts-legend-wrapper {
+  color: #e6f1ff !important;
+}
+
+.recharts-tooltip-wrapper {
+  background: #112240 !important;
+  border: 1px solid #233554 !important;
+  border-radius: 8px !important;
+}
+
+.recharts-default-tooltip {
+  background: #112240 !important;
+  border: 1px solid #233554 !important;
+  border-radius: 8px !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .tab-navigation button {
+    padding: 1rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .header p {
+    font-size: 1rem;
+  }
+  
+  .chart-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .prediction-value {
+    font-size: 2.2rem;
+  }
+  
+  .metric-value {
+    font-size: 2rem;
+  }
+  
+  .main-content {
+    padding: 1.5rem 15px;
+  }
+  
+  .sales-predictor,
+  .forecast-chart,
+  .model-info {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .tab-navigation {
+    padding: 0 10px;
+  }
+  
+  .tab-navigation button {
+    padding: 0.8rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .prediction-value {
+    font-size: 1.8rem;
+  }
+}

@@ -79,7 +79,7 @@ def date_time_processing_pipeline(df):
 
 def preprocessing():
     #Load Data
-    df = load_data('Data/train.csv')
+    df = load_data('Test_&_Train_Scripts/Data/train.csv')
     
     # Create a mapping for all 50 states 
     df = state_mapping(df)

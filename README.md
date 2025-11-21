@@ -1,7 +1,7 @@
 # Superstore-Sales-forecasting
 
 ## Dependencies
-Install Python and Node dependencies:
+Install Python and Node dependencies :
 ```powershell
 pip install -r requirements.txt
 ```

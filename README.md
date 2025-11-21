@@ -15,7 +15,7 @@ pip install -r requirements.txt
    python app.py
    ```
 
-2. Run the frontend
+2. Run the  frontend
    - Open a new terminal (PowerShell)
    - Start the React app:
    ```powershell

@@ -22,3 +22,4 @@ pip install -r requirements.txt
    cd Super-Store-App\frontend
    npm start
    ```
+    

@@ -1,0 +1,21 @@
+artifact_path: file:D:/Superstore-Sales-forecasting/mlruns/1/models/m-8e0fe73a63c44420896c8664475ccc42/artifacts
+flavors:
+  prophet:
+    code: null
+    data: model.pr
+    model_type: Prophet
+    prophet_version: 1.2.1
+  python_function:
+    data: model.pr
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.prophet
+    python_version: 3.13.7
+mlflow_version: 3.6.0
+model_id: m-8e0fe73a63c44420896c8664475ccc42
+model_size_bytes: 14443
+model_uuid: m-8e0fe73a63c44420896c8664475ccc42
+prompts: null
+run_id: ab1bd9b95e1a423ba55a3ef416a041c8
+utc_time_created: '2025-11-25 00:19:13.555651'

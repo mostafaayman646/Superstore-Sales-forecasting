@@ -240,7 +240,7 @@ class TimeSeriesAutoML:
         print(f"\n>>> Best Model: {self.best_model_name}")
         print(f"    Params: {self.best_model['params']}")
     
-    def _save_best_model(self, path: str = "Models/best_model"):
+    def _save_best_model(self, path: str = "Test_&_Train_Scripts/Models/best_model"):
         """Save best model info as JSON and log to MLflow."""
         
         # Prepare JSON-serializable data

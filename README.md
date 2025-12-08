@@ -9,9 +9,8 @@ pip install -r requirements.txt
 ## Run the demo
 1. Run the backend API
    - Open a terminal (PowerShell)
-   - Change to the backend folder and (optionally) activate the virtual environment, then run the app:
+   - run the app:
    ```powershell
-   cd Super-Store-App\backend
    python app.py
    ```
 
